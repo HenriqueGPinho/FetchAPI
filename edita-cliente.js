@@ -12,28 +12,26 @@ detalharCliente(id).then(dados => {
 
 const formEdicao = document.querySelector('[data-form]');
 
-const mensagemSucesso = mensagem => {
+const mensagem = (mensagem, status) => {
   const linha = document.createElement('tr');
 
-  const conteudoLinha = `
-    <div class="alert alert-success" role="alert">
-      ${mensagem}
-    </div>
-  `
+  let conteudoLinha;
 
-  linha.innerHTML = conteudoLinha;
+  if (status === 'sucesso') {
+    conteudoLinha = `
+      <div class="alert alert-success" role="alert">
+        ${mensagem}
+      </div>
+    `
+  }
 
-  return linha;
-}
-
-const mensagemErro = mensagem => {
-  const linha = document.createElement('tr');
-
-  const conteudoLinha = `
+  if (status === 'erro') {
+    conteudoLinha = `
     <div class="alert alert-warning" role="alert">
       ${mensagem}
     </div>
   `
+  }
 
   linha.innerHTML = conteudoLinha;
 
@@ -50,9 +48,9 @@ formEdicao.addEventListener('submit', event => {
 
   editarCliente(id, inputCPF.value, inputNome.value).then(resposta => {
     if (resposta.status === 200) {
-      formEdicao.appendChild(mensagemSucesso('Cliente editado com sucesso!'));
+      formEdicao.appendChild(mensagem('Cliente editado com sucesso!', 'sucesso'));
     } else {
-      formEdicao.appendChild(mensagemErro('Não foi possível editar o cliente!'));
+      formEdicao.appendChild(mensagem('Não foi possível editar o cliente!', 'erro'));
     }
   });
 });
